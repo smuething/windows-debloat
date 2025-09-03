@@ -1572,10 +1572,10 @@ if ($manufacturer -like "*HP*") {
 
 
 
-    ##Belt and braces, remove via CIM too
-    #foreach ($program in $UninstallPrograms) {
-    #    Get-CimInstance -Classname Win32_Product | Where-Object Name -Match $program | Invoke-CimMethod -MethodName UnInstall
-    #}
+    #Belt and braces, remove via CIM too
+    foreach ($program in $UninstallPrograms) {
+        Get-CimInstance -Classname Win32_Product | Where-Object Name -Match $program | Invoke-CimMethod -MethodName UnInstall
+    }
 
 
     #Remove HP Documentation if it exists
@@ -1606,10 +1606,10 @@ if ($manufacturer -like "*HP*") {
     if (Test-Path -Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Adobe offers.lnk" -PathType Leaf) { Remove-Item -Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Adobe offers.lnk" -Force }
     if (Test-Path -Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Miro Offer.lnk" -PathType Leaf) { Remove-Item -Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Miro offer.lnk" -Force }
 
-    ##Remove Wolf Security
-    #Get-CimInstance -ClassName Win32_Product | Where-Object { $_.Name -eq 'HP Wolf Security' } | Invoke-CimMethod -MethodName Uninstall
-    #Get-CimInstance -ClassName Win32_Product | Where-Object { $_.Name -eq 'HP Wolf Security - Console' } | Invoke-CimMethod -MethodName Uninstall
-    #Get-CimInstance -ClassName Win32_Product | Where-Object { $_.Name -eq 'HP Security Update Service' } | Invoke-CimMethod -MethodName Uninstall
+    #Remove Wolf Security
+    Get-CimInstance -ClassName Win32_Product | Where-Object { $_.Name -eq 'HP Wolf Security' } | Invoke-CimMethod -MethodName Uninstall
+    Get-CimInstance -ClassName Win32_Product | Where-Object { $_.Name -eq 'HP Wolf Security - Console' } | Invoke-CimMethod -MethodName Uninstall
+    Get-CimInstance -ClassName Win32_Product | Where-Object { $_.Name -eq 'HP Security Update Service' } | Invoke-CimMethod -MethodName Uninstall
 
     function Uninstall-HPPackages {
         param (
@@ -2273,7 +2273,7 @@ $IsOOBEComplete = $false
 $hr = [Api.Kernel32]::OOBEComplete([ref] $IsOOBEComplete)
 
 
-if ($IsOOBEComplete -eq 0) {
+# if ($IsOOBEComplete -eq 0) {
 
     write-output "Still in OOBE, continue"
     ##Apps to remove - NOTE: Chrome has an unusual uninstall so sort on it's own
@@ -2366,12 +2366,12 @@ if ($IsOOBEComplete -eq 0) {
     ##Run it
     Start-Process -FilePath "C:\ProgramData\Debloat\setup.exe" -ArgumentList "/configure C:\ProgramData\Debloat\o365.xml" -WindowStyle Hidden -Wait
 
-}
-else {
+#}
+#else {
     write-output "Intune detected, skipping removal of apps"
     write-output "$intunecomplete number of apps detected"
 
-}
+#}
 
 $stopUtc = [datetime]::UtcNow
 
